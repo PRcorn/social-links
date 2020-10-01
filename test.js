@@ -1,6 +1,6 @@
 //Create Site class to organize aites to add 
 class Site {
-    constructor(title, url, author){
+    constructor(title, url, desc){
         let absoluteURL = url;
         //Use conditionals in the constructor to filter url
         if (!url.startsWith("http://") && !url.startsWith("https://")){
@@ -9,7 +9,7 @@ class Site {
         }
         this.title = title;
         this.url = absoluteURL;
-        this.author = author;
+        this.desc = desc;
     }
 
 };
@@ -17,11 +17,10 @@ class Site {
 const main = document.getElementById("site-list");
 const h1 = document.getElementById('title-header');
 const statusArticle = document.getElementById('status-article');
+
 //Make a function that inserts the list into main id="url-list"
 const insertLink = siteClass => {
-    //main: where we append the article
-    //const main = document.getElementById("site-list");   
-    //artile: contains title, url, author
+    //artile: contains title, url, desc
     const article = document.createElement("article");
     article.className = "site";
     article.classList.add("new-site");
@@ -36,10 +35,10 @@ const insertLink = siteClass => {
     a.href = siteClass.url;
     a.textContent = a.href;
     a.className = "site-url";
-    //h4: contains site author
+    //h4: contains site desc
     const h4 = document.createElement("h4");
-    h4.textContent = siteClass.author;
-    h4.className = "site-author";
+    h4.textContent = siteClass.desc;
+    h4.className = "site-desc";
 
     //append elements to article
     article.appendChild(h3);
@@ -56,67 +55,69 @@ const insertLink = siteClass => {
     }, 10000);
 };
 
+//make function that creates input within the specified form
+const makeInput = (form, id, name, type) => {
+    const input = document.createElement("input");
+    input.type = type || "text";
+    input.className = "input-box";
+    input.id = id;
+    input.name = name || id;
+    input.required = true;
+    //create label
+    const label = document.createElement("label");
+    label.htmlFor = id;
+    label.textContent = name || id;
+    label.appendChild(input);
+
+    form.appendChild(label);
+}
+
+//cancel button for users who changed their mind
+const makeCancelButton = (form) => {
+    const cancelButton = document.createElement("button");
+    cancelButton.id = "cancel-button";
+    cancelButton.textContent = "Cancel";
+    cancelButton.addEventListener("click", e => {
+        e.preventDefault();
+        statusArticle.removeChild(form);
+        makeInputButton();
+    });
+    form.appendChild(cancelButton);
+};
+
+const makeSubmitButton = (form, id) => {
+    const button = document.createElement("button");
+    button.type = "submit";
+    button.id = id || "submit-button";
+    button.textContent = "Add to List";
+    form.appendChild(button);
+};
+
 //create submitLink function => 
 const submitLink = () => {
     
     //create form
     const form = document.createElement("form");
-    //make function that creates input
-    const makeInput = (id, name, type) => {
-        const input = document.createElement("input");
-        input.type = type || "text";
-        input.className = "input-box";
-        input.id = id;
-        input.name = name || id;
-        input.required = true;
-        //create label
-        const label = document.createElement("label");
-        label.htmlFor = id;
-        label.textContent = name || id;
-        label.appendChild(input);
-
-        form.appendChild(label);
-    }
+    
     //forEach element in array, makeInput
-    const inputArr = ["title", "url", "author"];
+    const inputArr = ["title", "url", "desc"];
     inputArr.forEach(element => {
-        /*if (element === "url") {
-            makeInput(element, element, "url");
-        }   else {
-        */    makeInput(element);
-        //}
+        makeInput(form, element);
     });
 
-    //cancel button for users who changed their mind
-    const makeCancelButton = () => {
-        const cancelButton = document.createElement("button");
-        cancelButton.id = "cancel-button";
-        cancelButton.textContent = "Cancel";
-        cancelButton.addEventListener("click", e => {
-            e.preventDefault();
-            statusArticle.removeChild(form);
-            makeInputButton();
-        });
-        form.appendChild(cancelButton);
-    };
-
-    //make submit button
-    const button = document.createElement("button");
-    button.type = "submit";
-    button.id = "submit-button";
-    button.textContent = "Add to List";
-    
-    form.appendChild(button);
-    makeCancelButton();
+    //make submit and cancel buttons for the form
+    makeSubmitButton(form, "submit-button");
+    makeCancelButton(form);
     //handle submit
     form.addEventListener("submit", e => {
         e.preventDefault();
+        const submitButton = document.getElementById("submit-button");
         //disable submit button to prevent multiple clicks that lead to multiple statuses and input buttons 
-        button.disabled = true;
+        submitButton.disabled = true;
 
         let titleInput = document.querySelector("input[name='title']");
         let urlInput = document.querySelector("input[name='url']");
-        let authorInput = document.querySelector("input[name='author']");
+        let descInput = document.querySelector("input[name='desc']");
 
         //addition status box that disappears
         const status = setTimeout(function(){
@@ -130,9 +131,9 @@ const submitLink = () => {
             //remove form after submit
             statusArticle.removeChild(form);
             //was not working properly because I forgot to use a new class.
-            const addSite = new Site(titleInput.value, urlInput.value, authorInput.value); 
+            const addSite = new Site(titleInput.value, urlInput.value, descInput.value); 
             insertLink(addSite);
-            //console.log(titleInput.value, urlInput.value, authorInput.value);
+            //console.log(titleInput.value, urlInput.value, descInput.value);
         }, 500);
         
 
@@ -157,9 +158,9 @@ const submitLink = () => {
 }
 
 //function that adds input button that reveals a form when clicked
-const makeInputButton = () => {
+const makeInputButton = (id) => {
     const inputButton = document.createElement("button");
-    inputButton.id = "input-button";
+    inputButton.id = id || "input-button";
     inputButton.textContent = "Add a Site";
     inputButton.addEventListener("click", e => {
         e.preventDefault();
@@ -174,5 +175,5 @@ const makeInputButton = () => {
 makeInputButton();
 
 //test
-const fb = new Site("Facebook", "facebook.com", "Mark");
+const fb = new Site("Facebook", "facebook.com", "Blue Site");
 insertLink(fb);

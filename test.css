@@ -12,7 +12,7 @@ body {
 }
 
 .articles-list{
-	background-color: #89beb3;
+	background-color: rgba(137, 190, 179, 0.75);
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -60,6 +60,7 @@ article.site a{
 
 button {
 	background-color: #a6a6a4;
+	color: #e6e6e6;
 	border: none;
 	margin-right: 0.25rem;
 	margin-left: 0.25rem;
@@ -67,10 +68,11 @@ button {
 
 button:hover {
 	background-color: #e8e8e8;
+	color: #625261;
 }
 
 input {
-
+	background-color: rgb(137, 190, 179, 0.5);
 }
 
 label {
