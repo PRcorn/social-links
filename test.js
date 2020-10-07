@@ -174,6 +174,25 @@ const makeInputButton = (id) => {
 
 makeInputButton();
 
-//test
+/*test
 const fb = new Site("Facebook", "facebook.com", "Blue Site");
 insertLink(fb);
+*/
+const flink1 = "https://gist.githubusercontent.com/PRcorn/76e7dd878d33cef048718a5f74f7c868/raw/5a36a96b2b3fac9394ff090dd0cee2a720798835/test.json";
+const flink2 = "https://gist.githubusercontent.com/PRcorn/76e7dd878d33cef048718a5f74f7c868/raw/5d585fb0985ffb8fc1195bf9650a994b8d241b68/test.json";
+
+//test json
+//used gist for now so access won't expire
+fetch(flink2)
+.then(response =>
+    response.json()
+)
+.then(arr => {
+    arr.forEach(obj => {
+        const info = new Site(obj.title, obj.url, obj.desc);
+        insertLink(info);
+    });
+})
+.catch(err => {
+    console.log(err.message)
+})
