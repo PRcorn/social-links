@@ -1,0 +1,7 @@
+# Ignore sublime type
+.sublime-project
+.sublime-workspace
+
+#ignore miscellaneous files
+.png
+.txt
